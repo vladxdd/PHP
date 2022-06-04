@@ -17,35 +17,42 @@ class TelegraphText
 
     function storeText()
     {
-        $inf = array(
+        $info = array(
             "text" => $this->text,
             "title" => $this->title,
             "author" => $this->author,
             "published " => $this->published,
         );
-        $inf_serialized = serialize($inf);
-        $op = file_get_contents($this->slug);
-        $op .= $inf_serialized;
-        file_put_contents($this->slug,$op);
+        $about = serialize($info);
+        $current = file_get_contents($this->slug);
+        $current .= "$about\n";
+        file_put_contents($this->slug, $current);
     }
 
     function loadText(): string
     {
-        $slug = $this->slug;
-        $inf_unserialized = unserialize($slug);
-        $this->text = $inf_unserialized["text"];
-        $this->title = $inf_unserialized["title"];
-        $this->author = $inf_unserialized["author"];
-        $this->published = $inf_unserialized["published"];
+        if (file_exists($this->slug)) {
+
+            $info = unserialize(file_get_contents($this->slug));
+
+            $this->title = $info['title'];
+
+            $this->text = $info['text'];
+
+            $this->author = $info['author'];
+
+            $this->published = $info['published'];
+
+        }
+
         return $this->text;
     }
 
-    function editText($title,$text)
+    function editText($title, $text)
     {
         $this->title = $title;
         $this->text = $text;
     }
-
 
 
 }
