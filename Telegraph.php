@@ -21,7 +21,7 @@ class TelegraphText
             "text" => $this->text,
             "title" => $this->title,
             "author" => $this->author,
-            "published " => $this->published,
+            "published" => $this->published,
         );
         $about = serialize($info);
         $current = file_get_contents($this->slug);
@@ -58,7 +58,54 @@ class TelegraphText
 }
 
 $telText = new TelegraphText("Vlad", "Text.txt");
-$telText->editText("Vlaaad", "Nme schimbat");
+$telText->editText("Vlaaad", "Nume schimbat");
 $telText->storeText();
 $telText->loadText();
+
+
+abstract class Storage
+{
+    abstract function create();
+
+    abstract function read($id);
+
+    abstract function update($id, Storage $storage);
+
+    abstract function delete($id);
+
+    abstract function list();
+
+}
+
+abstract class View
+{
+
+    public $storage;
+
+    function __construct($obj)
+    {
+        $this->storage = $obj;
+    }
+
+    abstract function displayTextById($id);
+
+    abstract function displayTextByUrl($url);
+
+}
+
+abstract class User{
+
+    public int $id;
+    public string $name;
+    public string $role;
+
+    abstract function getTextsToEdit();
+
+}
+
+class FileStorage{
+
+
+
+}
 
